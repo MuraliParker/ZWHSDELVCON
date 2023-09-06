@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="DELIVERY_head" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Partyno"/>
+                </Key>
+                <Property Name="Partyno" Type="Edm.String" Nullable="false" MaxLength="28" sap:unicode="false" sap:label="Busn. Partner" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PickedQty" Type="Edm.Decimal" Nullable="false" Precision="31" Scale="14" sap:unicode="false" sap:label="Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PickedUom" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unit of Measure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="TotalQty" Type="Edm.Decimal" Nullable="false" Precision="31" Scale="14" sap:unicode="false" sap:label="Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TotalUom" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unit of Measure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <NavigationProperty Name="HeadToItem" Relationship="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.headtoitem" FromRole="FromRole_headtoitem" ToRole="ToRole_headtoitem"/>
+            </EntityType>
+            <EntityType Name="Delivery_item" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Productno"/>
+                    <PropertyRef Name="Partyno"/>
+                    <PropertyRef Name="Docno"/>
+                </Key>
+                <Property Name="Productno" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Product" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Serno" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="SERVICE ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Partyno" Type="Edm.String" Nullable="false" MaxLength="28" sap:unicode="false" sap:label="Busn. Partner" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Docno" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Document Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PickedQty" Type="Edm.Decimal" Nullable="false" Precision="31" Scale="14" sap:unicode="false" sap:label="Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PickedUom" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unit of Measure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="TotalQty" Type="Edm.Decimal" Nullable="false" Precision="31" Scale="14" sap:unicode="false" sap:label="Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TotalUom" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Unit of Measure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+            </EntityType>
+            <EntityType Name="dlv_print" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="flag"/>
+                </Key>
+                <Property Name="flag" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Docno" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Document Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="NavToDlvPrint" Relationship="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.AssocDlvItemPrint" FromRole="FromRole_AssocDlvItemPrint" ToRole="ToRole_AssocDlvItemPrint"/>
+            </EntityType>
+            <EntityType Name="dlv_print_item" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Check"/>
+                </Key>
+                <Property Name="Docno" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Document Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Check" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Character 100" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="headtoitem" sap:content-version="1">
+                <End Type="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.DELIVERY_head" Multiplicity="*" Role="FromRole_headtoitem"/>
+                <End Type="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.Delivery_item" Multiplicity="*" Role="ToRole_headtoitem"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_headtoitem">
+                        <PropertyRef Name="Partyno"/>
+                    </Principal>
+                    <Dependent Role="ToRole_headtoitem">
+                        <PropertyRef Name="Partyno"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="AssocDlvItemPrint" sap:content-version="1">
+                <End Type="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.dlv_print" Multiplicity="1" Role="FromRole_AssocDlvItemPrint"/>
+                <End Type="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.dlv_print_item" Multiplicity="*" Role="ToRole_AssocDlvItemPrint"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_AssocDlvItemPrint">
+                        <PropertyRef Name="flag"/>
+                    </Principal>
+                    <Dependent Role="ToRole_AssocDlvItemPrint">
+                        <PropertyRef Name="Check"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="DELIVERY_headSet" EntityType="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.DELIVERY_head" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="Delivery_itemSet" EntityType="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.Delivery_item" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="dlv_printSet" EntityType="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.dlv_print" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="dlv_print_itemSet" EntityType="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.dlv_print_item" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="headtoitemSet" Association="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.headtoitem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="DELIVERY_headSet" Role="FromRole_headtoitem"/>
+                    <End EntitySet="Delivery_itemSet" Role="ToRole_headtoitem"/>
+                </AssociationSet>
+                <AssociationSet Name="AssocDlvItemPrintSet" Association="ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV.AssocDlvItemPrint" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="dlv_printSet" Role="FromRole_AssocDlvItemPrint"/>
+                    <End EntitySet="dlv_print_itemSet" Role="ToRole_AssocDlvItemPrint"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="https://parkerdewvm:8001/sap/opu/odata/sap/ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://parkerdewvm:8001/sap/opu/odata/sap/ZWHS_OUTB_DLV_CONSOLI_DISPLAY_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

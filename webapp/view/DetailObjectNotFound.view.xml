@@ -1,0 +1,14 @@
+<mvc:View
+    controllerName="whs.delivery.consolidation.whsdeliveryconsolidation.controller.DetailObjectNotFound"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+
+    <MessagePage
+        id="page"
+        title="{i18n>customer} : {i18n>noData}"
+        text="{i18n>customerDataNotFound}"
+        icon="sap-icon://product"
+        description="">
+    </MessagePage>
+
+</mvc:View>

@@ -1,0 +1,233 @@
+<mvc:View
+    controllerName="whs.delivery.consolidation.whsdeliveryconsolidation.controller.Detail"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc">
+
+    <semantic:SemanticPage
+        id="detailPage"
+        busy="{detailView>/busy}"
+        showFooter="true"
+        busyIndicatorDelay="{detailView>/delay}"
+        >
+        <semantic:titleHeading>
+            <Title
+                text="{i18n>customer} : {DetailsData>/Partyno}"
+                level="H2"/>
+        </semantic:titleHeading>
+        <semantic:headerContent>
+
+        </semantic:headerContent>
+        <semantic:content>
+                <List
+                        id="lineItemsList"
+                        width="auto"
+                        items="{
+                            path: 'DetailsData>/HeadToItem/results',
+                            sorter: {
+                                path: 'Docno',
+                                descending: false,
+                                group: true
+                            },
+                            groupHeaderFactory: '.createGroupHeader',
+                            templateShareable:false
+                        }"
+                        growing="true"
+                        growingScrollToLoad="true"
+                        mode="MultiSelect"
+                        updateFinished=".onListUpdateFinished"
+                        noDataText="{i18n>detailLineItemTableNoDataText}"
+                        busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title
+                                    id="lineItemsTitle"
+                                    text="{detailView>/lineItemListTitle}"
+                                    titleStyle="H3"
+                                    level="H3"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        
+                            <items>
+                                <CustomListItem 
+                                            class="sapUiResponsiveContentPadding">
+                                    
+                                    <Label     class="sapUiTinyMargin"
+                                                        text="{i18n>outBoundDelivery} : { 
+                                                                            path: 'DetailsData>Docno',
+                                                                            formatter: '.formatter.simpleNumber'
+                                                                        }"
+                                                        design="Bold" />
+                                    <Label     class="sapUiTinyMargin"
+                                                        text="{i18n>salesorder} : { 
+                                                                            path: 'DetailsData>salesorder',
+                                                                            formatter: '.formatter.simpleNumber'
+                                                                        }"
+                                                        design="Bold"
+                                                        visible="{= ${DetailsData>salesorder} ? true : false }" />
+                                    <Label     class="sapUiTinyMargin"
+                                                        text="{i18n>PTO} : { 
+                                                                            path: 'DetailsData>PTO',
+                                                                            formatter: '.formatter.simpleNumber'
+                                                                        }"
+                                                        design="Bold" 
+                                                        visible="{= ${DetailsData>PTO} ? true : false }" />
+                                    <List
+                                            id="prodList"
+                                            width="auto"
+                                           
+                                            items="{
+                                                path: 'DetailsData>NavDlvToProduct/results',
+                                                sorter: {
+                                                    path: 'Productno',
+                                                    descending: false,
+                                                    group: true
+                                                },
+                                                groupHeaderFactory: '.createGroupHeaderProd',
+                                                templateShareable:false
+                                            }"
+                                            mode="None"
+                                            
+                                            noDataText="{i18n>detailLineItemTableProdNoDataText}"
+                                            busyIndicatorDelay="{detailView>/prodListDelay}">
+                                            
+                                            <items>
+                                                <CustomListItem 
+                                                    class="sapUiResponsiveContentPadding">
+                                                            
+                                                        <Label        
+                                                            class="sapUiTinyMargin"
+                                                            text="{i18n>finishedGoodsByPartsPicked} : "
+                                                            design="Bold" />
+                                                        
+                                                        <ProgressIndicator 
+                                                            class="sapUiSmallMarginBottom"
+                                                            width="80%"
+                                                            percentValue="{
+                                                                    parts: [
+                                                                            'DetailsData>TotalQty',
+                                                                            'DetailsData>PickedQty'
+                                                                            ],
+                                                                        formatter: '.formatter.qtyPercentCalculator'
+                                                                    }"
+                                                            displayValue="{
+                                                                    parts: [
+                                                                            'DetailsData>TotalQty',
+                                                                            'DetailsData>PickedQty'
+                                                                            ],
+                                                                        formatter: '.formatter.displayValue'
+                                                                    }"
+                                                                    
+                                                            showValue="true"
+                                                            state="Success" />
+
+
+                                                                
+
+                                                        <Panel expandable="true" 
+                                                            headerText="{i18n>partNumber} : { 
+                                                                path: 'Productno',
+                                                                formatter: '.formatter.simpleNumber'
+                                                            }" 
+                                                            width="auto" 
+                                                            class="sapUiResponsiveMargin">
+                                                            <headerToolbar>
+                                                                <OverflowToolbar active="true" press="onOverflowToolbarPress">
+                                                                    <Title text="{i18n>partNumber} : { 
+                                                                                                    path: 'DetailsData>Productno',
+                                                                                                    formatter: '.formatter.simpleNumber'
+                                                                                                }" />
+                                                                    <ToolbarSpacer />
+                                                                    <Label 
+                                                                        
+                                                                        text="{i18n>partDescription} : {DetailsData>Maktx}"
+                                                                        design="Bold" />
+                                                                    </OverflowToolbar>
+                                                                </headerToolbar>
+                                                            <content>
+
+                                                           
+
+                                                            <f:GridList
+                                                                    
+                                                                    headerText="{i18n>serialNumbers}"
+                                                                    items="{
+                                                                            path: 'DetailsData>NavProductToSerial/results',
+                                                                            templateShareable:false
+                                                                            }">
+                                                                    <f:customLayout>
+                                                                        <grid:GridBoxLayout boxMinWidth="10rem"/>
+                                                                    </f:customLayout>
+
+                                                                    <f:GridListItem>
+
+                                                                        <VBox class="sapUiSmallMargin">
+                                                                            <layoutData>
+                                                                                <FlexItemData growFactor="1" shrinkFactor="0" />
+                                                                            </layoutData>
+                                                                            <Label text="{
+                                                                                                path: 'DetailsData>Serno',
+                                                                                                formatter: '.formatter.sernoText'
+                                                                                            }" 
+                                                                                    wrapping="true"  />
+                                                                        </VBox>
+
+                                                                    </f:GridListItem>
+                                                                </f:GridList>
+
+                                                                
+                                                                
+                                                            </content>
+                                                        </Panel>
+                                                        
+                                                        
+                                                </CustomListItem>
+                                            </items>
+                                        </List>     
+                                                        
+                                    </CustomListItem>
+                            </items>
+                    </List>
+            
+        </semantic:content>
+        <!--Semantic ShareMenu Buttons-->
+        <!-- <semantic:sendEmailAction>
+            <semantic:SendEmailAction
+                id="shareEmail"
+                press=".onSendEmailPress"/>
+        </semantic:sendEmailAction> -->
+
+        <semantic:closeAction>
+            <semantic:CloseAction
+                    id="closeColumn"
+                    press=".onCloseDetailPress"/>
+        </semantic:closeAction>
+
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction
+                    id="enterFullScreen"
+                    visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+                    press=".toggleFullScreen"/>
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction
+                    id="exitFullScreen"
+                    visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+                    press=".toggleFullScreen"/>
+        </semantic:exitFullScreenAction>
+        
+        		<!-- Custom Footer Content-->
+		<semantic:footerCustomActions>
+            
+			<Button id="_IDGenButton1" text="{i18n>printPackingList}" press=".onPrintPackingList" />
+		</semantic:footerCustomActions>
+        <semantic:messagesIndicator>
+            <semantic:MessagesIndicator id="idMessages" press="handleMessagePopoverPress"/>
+        </semantic:messagesIndicator>
+
+    </semantic:SemanticPage>
+
+</mvc:View>
