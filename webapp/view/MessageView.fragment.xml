@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <MessagePopover 
+        items="{message>/HeadToItem/results}"
+        >
+        <items>
+            <MessageItem
+                type="{
+                    path :'messages>Statuscode',
+                    formatter : '.getMessageType'
+                    }" 
+                description="{message>Docno}"
+				title= "{message>Status}"
+            />
+        </items>
+    </MessagePopover>
+</core:FragmentDefinition>
