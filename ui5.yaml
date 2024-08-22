@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
 
-specVersion: "2.5"
+specVersion: "2.6"
 metadata:
   name: whs.delivery.consolidation.whsdeliveryconsolidation
 type: application
@@ -20,7 +20,7 @@ server:
           - path: /sap
             url: http://parkerdewvm:8001
             client: "300"
-            destination: DEWDEV
+            destination: DW1
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

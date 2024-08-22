@@ -301,6 +301,10 @@ sap.ui.define([
             var oItemsList = this.byId("lineItemsList");
             var aContexts = oItemsList.getSelectedContexts(true);
             var aSelectedObj = [];
+            if (!aContexts || aContexts.length <= 0) {
+                MessageToast.show(this.getResourceBundle().getText("selectPickList"));
+                return;
+            }
             aContexts.forEach(oContext => {
                 aSelectedObj.push({ 
                         "Partyno": oContext.getObject().Partyno,
