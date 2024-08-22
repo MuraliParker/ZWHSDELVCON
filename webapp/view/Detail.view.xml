@@ -57,7 +57,7 @@
                                             class="sapUiResponsiveContentPadding"
                                             blocked="{
                                                                 parts: [
-                                                                            'NavDlvToProduct/results'
+                                                                            'DetailsData>NavDlvToProduct/results'
                                                                        ],
                                                                 formatter: '.formatter.disableNonPickedMain'
                                                             }"
