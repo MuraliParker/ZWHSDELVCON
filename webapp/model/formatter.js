@@ -56,6 +56,16 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"], function (NumberFormat) {
 
         },
 
+        disableNonPicked: function(PickedQty){
+            var nPickedQty = this.formatter.floatValueFormatter(PickedQty);
+            if(nPickedQty <= 0){
+                return true;
+            }else if(nPickedQty === '0'){
+                return true;
+            }
+            return false;
+        },
+
         displayValue: function (TotalQty, PickedQty) {
             
             var nTotalQty = this.formatter.floatValueFormatter(TotalQty);

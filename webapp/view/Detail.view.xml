@@ -96,7 +96,13 @@
                                             
                                             <items>
                                                 <CustomListItem 
-                                                    class="sapUiResponsiveContentPadding">
+                                                    class="sapUiResponsiveContentPadding"
+                                                    blocked="{
+                                                                parts: [
+                                                                            'DetailsData>PickedQty'
+                                                                       ],
+                                                                formatter: '.formatter.disableNonPicked'
+                                                            }">
                                                             
                                                         <Label        
                                                             class="sapUiTinyMargin"
