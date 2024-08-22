@@ -87,7 +87,7 @@ sap.ui.define([
 
         onSelectionChange: function(oEvent){
             console.log("Selection Ch:",oEvent);
-            var aSelectedItems = oEvent.getParameter('listItems');
+            var aSelectedItems = oEvent.getSource().getSelectedItems();
             var oPrintButton = this.getView().byId("_printbutton");
             
             if(aSelectedItems && aSelectedItems.length > 0){
