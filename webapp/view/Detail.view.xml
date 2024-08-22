@@ -231,7 +231,7 @@
         		<!-- Custom Footer Content-->
 		<semantic:footerCustomActions>
             
-			<Button id="_printbutton" text="{i18n>printPackingList}" press=".onPrintPackingList" />
+			<Button id="_printbutton" text="{i18n>printPackingList}" press=".onPrintPackingList" enabled="false" />
 		</semantic:footerCustomActions>
         <semantic:messagesIndicator>
             <semantic:MessagesIndicator id="idMessages" press="handleMessagePopoverPress"/>
