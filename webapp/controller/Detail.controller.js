@@ -85,6 +85,19 @@ sap.ui.define([
             );
         },
 
+        onSelectionChange: function(oEvent){
+            console.log("Selection Ch:",oEvent);
+            var aSelectedItems = oEvent.getParameter('listItems');
+            var oPrintButton = this.getView().byId("_printbutton");
+            
+            if(aSelectedItems && aSelectedItems.length > 0){
+                oPrintButton.setEnabled(true);
+                return;
+            }
+            oPrintButton.setEnabled(false);
+        },
+
+        
 
         /**
          * Updates the item count within the line item table's header
