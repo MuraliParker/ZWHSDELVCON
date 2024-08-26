@@ -20,6 +20,6 @@ builder:
           name: ZWHSDELVCON
           description: WHS_E011 Delivery Consolidation
           package: ZFIORI
-          transport: DW1K900335
+          transport: DW1K900362
         exclude:
           - /test/
