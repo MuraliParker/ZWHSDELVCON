@@ -60,7 +60,7 @@
                                                                             'DetailsData>NavDlvToProduct/results'
                                                                        ],
                                                                 formatter: '.formatter.disableNonPickedMain'
-                                                            }"
+                                                            }"  
                                 >
                                     
                                     <Label     class="sapUiTinyMargin"

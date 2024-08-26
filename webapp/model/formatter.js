@@ -69,13 +69,28 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"], function (NumberFormat) {
             
             for (let index = 0; index < aProduct.length; index++) {
                 const oProduct = aProduct[index];
-                var nPickedQty = this.formatter.floatValueFormatter(oProduct.PickedQty);
+                var nPickedQty = this.formatter._floatValueFormatterNonGrp(oProduct.PickedQty);
                 if (nPickedQty > 0) {
                     return false;
                 } 
                 
             }
             return true;
+        },
+        _floatValueFormatterNonGrp: function (sValue) {
+            var oNumFormatter = NumberFormat.getIntegerInstance({
+                "groupingEnabled": false,  // grouping is enabled
+                // "groupingSeparator": ',', // grouping separator is '.'
+                // "groupingSize": 3,         // the amount of digits to be grouped (here: thousand)
+                "decimalSeparator": '.'    //Decimal separator
+            });
+            try {
+                var rValue = oNumFormatter.format(sValue);
+            } catch (error) {
+                return sValue;
+            }
+            return rValue;
+
         },
 
 
