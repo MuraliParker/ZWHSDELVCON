@@ -85,6 +85,19 @@ sap.ui.define([
             );
         },
 
+        onSelectionChange: function(oEvent){
+            console.log("Selection Ch:",oEvent);
+            var aSelectedItems = oEvent.getSource().getSelectedItems();
+            var oPrintButton = this.getView().byId("_printbutton");
+            
+            if(aSelectedItems && aSelectedItems.length > 0){
+                oPrintButton.setEnabled(true);
+                return;
+            }
+            oPrintButton.setEnabled(false);
+        },
+
+        
 
         /**
          * Updates the item count within the line item table's header
@@ -301,6 +314,10 @@ sap.ui.define([
             var oItemsList = this.byId("lineItemsList");
             var aContexts = oItemsList.getSelectedContexts(true);
             var aSelectedObj = [];
+            if (!aContexts || aContexts.length <= 0) {
+                MessageToast.show(this.getResourceBundle().getText("selectPickList"));
+                return;
+            }
             aContexts.forEach(oContext => {
                 aSelectedObj.push({ 
                         "Partyno": oContext.getObject().Partyno,

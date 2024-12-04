@@ -36,28 +36,66 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"], function (NumberFormat) {
 
         },
 
-        getMessageType: function(type){
-            switch(type) {
+        getMessageType: function (type) {
+            switch (type) {
                 case "E":
-                  // code block
-                  return sap.ui.core.MessageType.Error;
+                    // code block
+                    return sap.ui.core.MessageType.Error;
                 case "I":
-                  // code block
-                  return sap.ui.core.MessageType.Information;
-                  case "S":
-                  // code block
-                  return sap.ui.core.MessageType.Success;
-                  case "W":
-                  // code block
-                  return sap.ui.core.MessageType.Warning;
+                    // code block
+                    return sap.ui.core.MessageType.Information;
+                case "S":
+                    // code block
+                    return sap.ui.core.MessageType.Success;
+                case "W":
+                    // code block
+                    return sap.ui.core.MessageType.Warning;
                 default:
-                  return sap.ui.core.MessageType.None;
-              }
+                    return sap.ui.core.MessageType.None;
+            }
 
         },
 
-        displayValue: function (TotalQty, PickedQty) {
+        disableNonPicked: function (PickedQty) {
+            var nPickedQty = this.formatter.floatValueFormatter(PickedQty);
+            if (nPickedQty <= 0) {
+                return true;
+            } else if (nPickedQty === '0') {
+                return true;
+            }
+            return false;
+        },
+        disableNonPickedMain: function (aProduct) {
             
+            for (let index = 0; index < aProduct.length; index++) {
+                const oProduct = aProduct[index];
+                var nPickedQty = this.formatter._floatValueFormatterNonGrp(oProduct.PickedQty);
+                if (nPickedQty > 0) {
+                    return false;
+                } 
+                
+            }
+            return true;
+        },
+        _floatValueFormatterNonGrp: function (sValue) {
+            var oNumFormatter = NumberFormat.getIntegerInstance({
+                "groupingEnabled": false,  // grouping is enabled
+                // "groupingSeparator": ',', // grouping separator is '.'
+                // "groupingSize": 3,         // the amount of digits to be grouped (here: thousand)
+                "decimalSeparator": '.'    //Decimal separator
+            });
+            try {
+                var rValue = oNumFormatter.format(sValue);
+            } catch (error) {
+                return sValue;
+            }
+            return rValue;
+
+        },
+
+
+        displayValue: function (TotalQty, PickedQty) {
+
             var nTotalQty = this.formatter.floatValueFormatter(TotalQty);
             var nPickedQty = this.formatter.floatValueFormatter(PickedQty);
 
@@ -80,8 +118,8 @@ sap.ui.define(["sap/ui/core/format/NumberFormat"], function (NumberFormat) {
 
         },
         sernoText: function (serno) {
-			// console.log("serno:",serno);
+            // console.log("serno:",serno);
             return serno;
-		}
+        }
     };
 });

@@ -36,7 +36,8 @@
                             templateShareable:false
                         }"
                         growing="true"
-                        growingScrollToLoad="true"
+                        growingScrollToLoad="true" 
+	                    selectionChange=".onSelectionChange"
                         mode="MultiSelect"
                         updateFinished=".onListUpdateFinished"
                         noDataText="{i18n>detailLineItemTableNoDataText}"
@@ -53,7 +54,14 @@
                         
                             <items>
                                 <CustomListItem 
-                                            class="sapUiResponsiveContentPadding">
+                                            class="sapUiResponsiveContentPadding"
+                                            blocked="{
+                                                                parts: [
+                                                                            'DetailsData>NavDlvToProduct/results'
+                                                                       ],
+                                                                formatter: '.formatter.disableNonPickedMain'
+                                                            }"  
+                                >
                                     
                                     <Label     class="sapUiTinyMargin"
                                                         text="{i18n>outBoundDelivery} : { 
@@ -96,7 +104,8 @@
                                             
                                             <items>
                                                 <CustomListItem 
-                                                    class="sapUiResponsiveContentPadding">
+                                                    class="sapUiResponsiveContentPadding"
+                                                    >
                                                             
                                                         <Label        
                                                             class="sapUiTinyMargin"
@@ -222,7 +231,7 @@
         		<!-- Custom Footer Content-->
 		<semantic:footerCustomActions>
             
-			<Button id="_IDGenButton1" text="{i18n>printPackingList}" press=".onPrintPackingList" />
+			<Button id="_printbutton" text="{i18n>printPackingList}" press=".onPrintPackingList" enabled="false" />
 		</semantic:footerCustomActions>
         <semantic:messagesIndicator>
             <semantic:MessagesIndicator id="idMessages" press="handleMessagePopoverPress"/>
