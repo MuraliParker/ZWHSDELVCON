@@ -14,10 +14,10 @@ builder:
       afterTask: generateCachebusterInfo
       configuration:
         target:
-          destination: DEWDEV
+          destination: DW1
           url: http://parkerdewvm:8001
         app:
           name: ZWHSDELVCON
           description: WHS_E011 Delivery Consolidation
           package: ZFIORI
-          transport: DEWK900821
+          transport: DW1K900581

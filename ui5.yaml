@@ -19,8 +19,8 @@ server:
         backend:
           - path: /sap
             url: http://parkerdewvm:8001
-            client: "300"
-            destination: DEWDEV
+            client: "100"
+            destination: DW1
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

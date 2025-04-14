@@ -113,7 +113,7 @@ sap.ui.define([
             var sQuery = oEvent.getParameter("query");
 
             if (sQuery) {
-                this._oListFilterState.aSearch = [new Filter("Partyno", FilterOperator.Contains, sQuery)];
+                this._oListFilterState.aSearch = [new Filter("Partyno", FilterOperator.EQ, sQuery)];
             } else {
                 this._oListFilterState.aSearch = [];
             }
