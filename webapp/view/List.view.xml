@@ -1,13 +1,52 @@
-<mvc:View controllerName="whs.delivery.consolidation.whsdeliveryconsolidation.controller.List"
-    xmlns="sap.m"
-    xmlns:semantic="sap.f.semantic"
+<mvc:View controllerName="whs.delivery.consolidation.whsdeliveryconsolidation.controller.List" height="100%"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
-    xmlns:mvc="sap.ui.core.mvc">
-    <semantic:SemanticPage id="listPage" preserveHeaderStateOnScroll="true" toggleHeaderOnTitleClick="false">
-        <semantic:titleHeading>
-            <Title id="listPageTitle" text="{listView>/title}" level="H2"/>
-        </semantic:titleHeading>
-        <semantic:content>
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants">
+    <f:DynamicPage>
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem name="Name" label="Customer Selection" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <!-- 
+                                        01 => Single / Multiple Selection
+                                        02 => Range Selection 
+                                    -->
+                                    <Select name="Name" selectedKey="{UIModel>/customerSelection}">
+                                        <core:Item key="01" text="Single / Multiple"/>
+                                        <core:Item key="02" text="Range"/>
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="Customer" label="Customer Number" groupName="Group1" visibleInFilterBar="true" visible="{= ${UIModel>/customerSelection} === '01' ? true : false}">
+                                <fb:control>
+                                    <MultiComboBox showSecondaryValues="true" name="Name" selectedKeys="{UIModel>/SelectedCustomers}" items="{UIModel>/CustomerList}">
+                                        <core:ListItem key="{UIModel>partyno}" text="{UIModel>partyno}" additionalText="{UIModel>name1}"/>
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerFrom" label="Customer From" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Input value="{UIModel>/CustomerStart}"></Input>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerTo" label="Customer To" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Input value="{UIModel>/CustomerEnd}"></Input>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
             <!-- For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
             <List id="list" width="auto" class="sapFDynamicPageAlignContent" items="{
                     path: '/DELIVERY_headSet',
@@ -17,7 +56,7 @@
                     },
                     groupHeaderFactory: '.createGroupHeader',
                     templateShareable:false
-                }" busyIndicatorDelay="{listView>/delay}" noDataText="{listView>/noDataText}" mode="None" growing="true" growingScrollToLoad="false" growingThreshold="100" updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
+                }" busyIndicatorDelay="{listView>/delay}" noDataText="{listView>/noDataText}" mode="None" growing="true" growingScrollToLoad="true" growingThreshold="100" updateFinished=".onUpdateFinished" selectionChange=".onSelectionChange">
                 <infoToolbar>
                     <Toolbar active="true" id="filterBar" visible="{listView>/isFilterBarVisible}" press=".onOpenViewSettings">
                         <Title id="filterBarLabel" text="{listView>/filterBarLabel}" level="H3"/>
@@ -25,15 +64,17 @@
                 </infoToolbar>
                 <headerToolbar>
                     <OverflowToolbar id="_IDGenOverflowToolbar1">
-                        <SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>listSearchTooltip}" search=".onSearch" width="auto">
+                        <Title id="filterBarLabel1" text="{listView>/title}" level="H3"/>
+
+                        <!-- <SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>listSearchTooltip}" search=".onSearch" width="auto">
                             <layoutData>
                                 <OverflowToolbarLayoutData id="_IDGenOverflowToolbarLayoutData1" minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>
                             </layoutData>
-                        </SearchField>
+                        </SearchField> -->
                         <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                        <Button id="sortButton" press=".onOpenViewSettings" icon="sap-icon://sort" type="Transparent"/>
-                        <Button id="filterButton" press=".onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>
-                        <Button id="groupButton" press=".onOpenViewSettings" icon="sap-icon://group-2" type="Transparent"/>
+                        <Button visible="false" id="sortButton" press=".onOpenViewSettings" icon="sap-icon://sort" type="Transparent"/>
+                        <Button visible="false" id="filterButton" press=".onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>
+                        <Button visible="false" id="groupButton" press=".onOpenViewSettings" icon="sap-icon://group-2" type="Transparent"/>
                     </OverflowToolbar>
                 </headerToolbar>
                 <items>
@@ -60,6 +101,6 @@
                     </CustomListItem>
                 </items>
             </List>
-        </semantic:content>
-    </semantic:SemanticPage>
+        </f:content>
+    </f:DynamicPage>
 </mvc:View>
