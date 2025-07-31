@@ -26,9 +26,13 @@
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem name="Customer" label="Customer Number" groupName="Group1" visibleInFilterBar="true" visible="{= ${UIModel>/customerSelection} === '01' ? true : false}">
                                 <fb:control>
-                                    <MultiComboBox showSecondaryValues="true" name="Name" selectedKeys="{UIModel>/SelectedCustomers}" items="{UIModel>/CustomerList}">
-                                        <core:ListItem key="{UIModel>partyno}" text="{UIModel>partyno}" additionalText="{UIModel>name1}"/>
-                                    </MultiComboBox>
+                                    <HBox>
+                                        <MultiInput id="idCustomer" value="{UIModel>/SelectedCustomers}" valueHelpRequest="onCustomerVH" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
+                                            <suggestionItems>
+                                                <core:Item text="{UIModel>partyno}" key="{UIModel>name1}"/>
+                                            </suggestionItems>
+                                        </MultiInput>
+                                    </HBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerFrom" label="Customer From" groupName="Group1" visibleInFilterBar="true">

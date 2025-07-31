@@ -8,13 +8,15 @@ sap.ui.define([
     "sap/ui/Device",
     "sap/ui/core/Fragment",
     "../model/formatter",
-    "sap/m/MessageBox"
-], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter, MessageBox) {
+    "sap/m/MessageBox",
+    "../utils/ValueHelp"
+], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter, MessageBox, ValueHelp) {
     "use strict";
 
-    return BaseController.extend("whs.delivery.consolidation.whsdeliveryconsolidation.controller.List", {
+    return BaseController.extend("whs.delivery.consolidation.whsdeliveryconsolidation.controller.List", jQuery.extend({}, ValueHelp, {
 
         formatter: formatter,
+        _oValueHelpDialogs: {},
 
         /* =========================================================== */
         /* lifecycle methods                                           */
@@ -34,7 +36,8 @@ sap.ui.define([
                 iOriginalBusyDelay = oList.getBusyIndicatorDelay();
 
             this._oDataModel = this.getOwnerComponent().getModel();
-            this._oUIModel = this.getOwnerComponent().getModel("UIModel")
+            this._oUIModel = this.getOwnerComponent().getModel("UIModel");
+            this._oUIModel.setSizeLimit(9999999);
             this._oDataModel.metadataLoaded().then(() => {
                 this._readCustomers();
             });
@@ -121,16 +124,17 @@ sap.ui.define([
         onSearch: function (oEvent) {
             let sCustomerSelection = this._oUIModel.getProperty("/customerSelection"), aFilters = [];
             if (sCustomerSelection === "01") {
-                let aSelectedCustomers = this._oUIModel.getProperty("/SelectedCustomers");
+                let oCustomerVH = this.getView().byId("idCustomer"),
+                    aSelectedCustomers = oCustomerVH.getTokens();
                 aSelectedCustomers = aSelectedCustomers ? aSelectedCustomers : [];
                 if (aSelectedCustomers.length === 1) {
                     // Single 
-                    aFilters = [new Filter("Partyno", FilterOperator.EQ, aSelectedCustomers[0])];
+                    aFilters = [new Filter("Partyno", FilterOperator.EQ, aSelectedCustomers[0].getKey())];
                 } else if (aSelectedCustomers.length > 1) {
                     // Multiple selection
                     let aSubFilters = [];
-                    aSelectedCustomers.forEach((sCustomer) => {
-                        aSubFilters.push(new Filter("Partyno", FilterOperator.EQ, sCustomer));
+                    aSelectedCustomers.forEach((oToken) => {
+                        aSubFilters.push(new Filter("Partyno", FilterOperator.EQ, oToken.getKey()));
                     });
                     aFilters = [new Filter({
                         filters: aSubFilters,
@@ -398,8 +402,33 @@ sap.ui.define([
             var oViewModel = this.getModel("listView");
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
+        },
+
+        onCustomerVH: function (oEvent) {
+            let oFragmentInfo = {
+                name: "whs.delivery.consolidation.whsdeliveryconsolidation.view.valuehelps.CustomerVH",
+                controller: this
+            }, oConfig = {
+                rangeKey: { key: "partyno", label: "partyno" },
+                context: "UIModel>/CustomerList",
+                columns: [
+                    { field: "partyno", label: "Customer" },
+                    { field: "name1", label: "Name" }
+                ]
+            };
+            this._valueHelpRequested(oEvent, oFragmentInfo, oConfig);
+        },
+
+        onCustomerSearch: function (oEvent) {
+            let oConfig = {
+                columns: [
+                    { field: "partyno", label: "Customer" },
+                    { field: "name1", label: "Name" }
+                ]
+            };
+            this._valueHelpSearch(oEvent, oConfig);
         }
 
-    });
+    }));
 
 });
