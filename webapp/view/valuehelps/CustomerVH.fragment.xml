@@ -3,7 +3,7 @@
     xmlns:m="sap.m"
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:core="sap.ui.core">
-    <ValueHelpDialog title="{i18n>select_customer}" ok=".onValueHelpOkPress" cancel=".onValueHelpCancelPress" supportRanges="true" key="partyno" descriptionKey="name1">
+    <ValueHelpDialog title="{i18n>select_customer}" supportMultiselect="{= ${UIModel>/customerSelection} === '01' ? true : false}" ok=".onValueHelpOkPress" cancel=".onValueHelpCancelPress" supportRanges="true" key="partyno" descriptionKey="name1">
         <filterBar>
             <fb:FilterBar advancedMode="true" search="onCustomerSearch">
                 <fb:filterGroupItems>

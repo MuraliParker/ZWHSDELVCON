@@ -26,23 +26,29 @@
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem name="Customer" label="Customer Number" groupName="Group1" visibleInFilterBar="true" visible="{= ${UIModel>/customerSelection} === '01' ? true : false}">
                                 <fb:control>
-                                    <HBox>
-                                        <MultiInput id="idCustomer" value="{UIModel>/SelectedCustomers}" valueHelpRequest="onCustomerVH" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
-                                            <suggestionItems>
-                                                <core:Item text="{UIModel>partyno}" key="{UIModel>name1}"/>
-                                            </suggestionItems>
-                                        </MultiInput>
-                                    </HBox>
+                                    <MultiInput change="onMultiInputSubmit" submit="onMultiInputSubmit" id="idCustomer" valueHelpRequest="onCustomerVH"  tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
+                                        <suggestionItems>
+                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
+                                        </suggestionItems>
+                                    </MultiInput>
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerFrom" label="Customer From" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Input value="{UIModel>/CustomerStart}"></Input>
+                                    <MultiInput change="onMultiInputSubmit"  submit="onMultiInputSubmit" id="idCustomerStart" valueHelpRequest="onCustomerVH"  tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
+                                        <suggestionItems>
+                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
+                                        </suggestionItems>
+                                    </MultiInput>
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerTo" label="Customer To" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Input value="{UIModel>/CustomerEnd}"></Input>
+                                    <MultiInput change="onMultiInputSubmit"  submit="onMultiInputSubmit" id="idCustomerEnd" valueHelpRequest="onCustomerVH" tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
+                                        <suggestionItems>
+                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
+                                        </suggestionItems>
+                                    </MultiInput>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>

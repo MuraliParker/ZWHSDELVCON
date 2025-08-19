@@ -126,6 +126,10 @@ sap.ui.define([
             if (sCustomerSelection === "01") {
                 let oCustomerVH = this.getView().byId("idCustomer"),
                     aSelectedCustomers = oCustomerVH.getTokens();
+                if (oCustomerVH.getValueState() === "Error") {
+                    MessageBox.error("Please enter valid customer");
+                    return;
+                }
                 aSelectedCustomers = aSelectedCustomers ? aSelectedCustomers : [];
                 if (aSelectedCustomers.length === 1) {
                     // Single 
@@ -143,13 +147,24 @@ sap.ui.define([
                 }
             } else {
                 // Range selection
-                let sCustomerStart = this._oUIModel.getProperty("/CustomerStart"),
-                    sCustomerEnd = this._oUIModel.getProperty("/CustomerEnd");
+                let oCustomerStartVH = this.getView().byId("idCustomerStart"),
+                    aCustomerStart = oCustomerStartVH.getTokens();
+                let oCustomerEndVH = this.getView().byId("idCustomerEnd"),
+                    aCustomerEnd = oCustomerEndVH.getTokens();
+                if (aCustomerStart.length === 0 || aCustomerEnd.length === 0) {
+                    MessageBox.error("Please select valid customer range");
+                    return;
+                } 
+
+                if (oCustomerStartVH.getValueState() === "Error" || oCustomerEndVH.getValueState() === "Error") {
+                    MessageBox.error("Please enter valid customer range");
+                    return;
+                }
                 aFilters = [new Filter({
                     path: "Partyno",
                     operator: "BT",
-                    value1: sCustomerStart,
-                    value2: sCustomerEnd
+                    value1: aCustomerStart[0].getKey(),
+                    value2: aCustomerEnd[0].getKey()
                 })];
             }
             if (oEvent.getParameters().refreshButtonPressed) {
@@ -417,6 +432,27 @@ sap.ui.define([
                 ]
             };
             this._valueHelpRequested(oEvent, oFragmentInfo, oConfig);
+        },
+
+        onCustomerTokenUpdate: function (oEvent) {
+            var sTokenType = oEvent.getParameter("type");
+            if (sTokenType === "added") {
+                this._tokenUpdate(oEvent);
+            }
+        },
+
+        _tokenUpdate: function (oEvent) {
+            oEvent.getSource().setValueState("None");
+            oEvent.getSource().setValueStateText("");
+        },
+
+        onMultiInputSubmit: function (oEvent) {
+            let sValue = oEvent.getSource().getValue();
+            if (sValue) {
+                oEvent.getSource().setValueState("Error");
+            } else {
+                oEvent.getSource().setValueState("None");
+            }
         },
 
         onCustomerSearch: function (oEvent) {
