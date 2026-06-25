@@ -10,43 +10,13 @@
         <f:header>
             <f:DynamicPageHeader>
                 <f:content>
-                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                    <fb:FilterBar showFilterConfiguration="false" id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
                         <fb:filterGroupItems>
-                            <fb:FilterGroupItem name="Name" label="Customer Selection" groupName="Group1" visibleInFilterBar="true">
+                            <fb:FilterGroupItem name="Customer" label="Customer Number" groupName="Group1" visibleInFilterBar="true" visible="true">
                                 <fb:control>
-                                    <!-- 
-                                        01 => Single / Multiple Selection
-                                        02 => Range Selection 
-                                    -->
-                                    <Select name="Name" selectedKey="{UIModel>/customerSelection}">
-                                        <core:Item key="01" text="Single / Multiple"/>
-                                        <core:Item key="02" text="Range"/>
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="Customer" label="Customer Number" groupName="Group1" visibleInFilterBar="true" visible="{= ${UIModel>/customerSelection} === '01' ? true : false}">
-                                <fb:control>
-                                    <MultiInput change="onMultiInputSubmit" submit="onMultiInputSubmit" id="idCustomer" valueHelpRequest="onCustomerVH"  tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
+                                    <MultiInput suggest="onCustomerSuggest" submit="onSearch" id="idCustomer" valueHelpRequest="onCustomerVH" tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{suggestion>/}">
                                         <suggestionItems>
-                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
-                                        </suggestionItems>
-                                    </MultiInput>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerFrom" label="Customer From" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <MultiInput change="onMultiInputSubmit"  submit="onMultiInputSubmit" id="idCustomerStart" valueHelpRequest="onCustomerVH"  tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
-                                        <suggestionItems>
-                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
-                                        </suggestionItems>
-                                    </MultiInput>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem visible="{= ${UIModel>/customerSelection} === '02' ? true : false}" name="CustomerTo" label="Customer To" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <MultiInput change="onMultiInputSubmit"  submit="onMultiInputSubmit" id="idCustomerEnd" valueHelpRequest="onCustomerVH" tokenUpdate="onCustomerTokenUpdate" showValueHelp="true" showSuggestion="true" suggestionItems="{UIModel>/CustomerList}">
-                                        <suggestionItems>
-                                            <core:Item text="{UIModel>partyno}" key="{UIModel>partyno}"/>
+                                            <core:Item text="{suggestion>partyno}" key="{suggestion>partyno}" />
                                         </suggestionItems>
                                     </MultiInput>
                                 </fb:control>

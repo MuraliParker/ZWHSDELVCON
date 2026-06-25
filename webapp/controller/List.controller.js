@@ -87,6 +87,19 @@ sap.ui.define([
             this.getRouter().attachBypassed(this.onBypassed, this);
         },
 
+        onCustomerSuggest: function (oEvent) {
+            const sValue = oEvent.getParameter("suggestValue").toLowerCase();
+            const aFullList = this._oUIModel.getProperty("/CustomerList") || [];
+
+            const aFiltered = aFullList.filter(item =>
+                item.partyno.toLowerCase().includes(sValue)
+            ).slice(0, 50); // Limit to top 50 matches
+
+            const oSuggestionModel = new JSONModel(aFiltered);
+            this.getView().byId("idCustomer").setModel(oSuggestionModel, "suggestion");
+        },
+
+
         _readCustomers: function () {
             this._oDataModel.read("/partyno_detSet", {
                 success: (oData) => {
@@ -122,51 +135,55 @@ sap.ui.define([
          * @public
          */
         onSearch: function (oEvent) {
-            let sCustomerSelection = this._oUIModel.getProperty("/customerSelection"), aFilters = [];
-            if (sCustomerSelection === "01") {
-                let oCustomerVH = this.getView().byId("idCustomer"),
-                    aSelectedCustomers = oCustomerVH.getTokens();
-                if (oCustomerVH.getValueState() === "Error") {
-                    MessageBox.error("Please enter valid customer");
-                    return;
-                }
-                aSelectedCustomers = aSelectedCustomers ? aSelectedCustomers : [];
-                if (aSelectedCustomers.length === 1) {
-                    // Single 
-                    aFilters = [new Filter("Partyno", FilterOperator.EQ, aSelectedCustomers[0].getKey())];
-                } else if (aSelectedCustomers.length > 1) {
-                    // Multiple selection
-                    let aSubFilters = [];
-                    aSelectedCustomers.forEach((oToken) => {
-                        aSubFilters.push(new Filter("Partyno", FilterOperator.EQ, oToken.getKey()));
-                    });
-                    aFilters = [new Filter({
-                        filters: aSubFilters,
-                        and: false
-                    })];
-                }
+            let aFilters = [],
+                oCustomerVH = this.getView().byId("idCustomer"),
+                aSelectedCustomers = oCustomerVH.getTokens();
+            if (aSelectedCustomers.length === 0 && oCustomerVH.getValue()) {
+                // For entering inputs
+                let sValue = oCustomerVH.getValue();
+                aFilters = [new Filter("Partyno", FilterOperator.Contains, sValue)];
+                oCustomerVH.setValue("");
             } else {
-                // Range selection
-                let oCustomerStartVH = this.getView().byId("idCustomerStart"),
-                    aCustomerStart = oCustomerStartVH.getTokens();
-                let oCustomerEndVH = this.getView().byId("idCustomerEnd"),
-                    aCustomerEnd = oCustomerEndVH.getTokens();
-                if (aCustomerStart.length === 0 || aCustomerEnd.length === 0) {
-                    MessageBox.error("Please select valid customer range");
-                    return;
-                } 
-
-                if (oCustomerStartVH.getValueState() === "Error" || oCustomerEndVH.getValueState() === "Error") {
-                    MessageBox.error("Please enter valid customer range");
-                    return;
+                // For value helps, tokens
+                if (aSelectedCustomers.length > 0) {
+                    if (!aSelectedCustomers[0].getKey().includes("range")) {
+                        if (oCustomerVH.getValueState() === "Error") {
+                            MessageBox.error("Please enter valid customer");
+                            return;
+                        }
+                        aSelectedCustomers = aSelectedCustomers ? aSelectedCustomers : [];
+                        if (aSelectedCustomers.length === 1) {
+                            // Single 
+                            aFilters = [new Filter("Partyno", FilterOperator.EQ, aSelectedCustomers[0].getKey())];
+                        } else if (aSelectedCustomers.length > 1) {
+                            // Multiple selection
+                            let aSubFilters = [];
+                            aSelectedCustomers.forEach((oToken) => {
+                                aSubFilters.push(new Filter("Partyno", FilterOperator.EQ, oToken.getKey()));
+                            });
+                            aFilters = [new Filter({
+                                filters: aSubFilters,
+                                and: false
+                            })];
+                        }
+                    } else {
+                        // For value help, Range selection
+                        let customerRange = aSelectedCustomers[0].getText();
+                        customerRange = customerRange.split("...");
+                        if (!customerRange[0] || !customerRange[1]) {
+                            MessageBox.error("Please enter valid customer range");
+                            return;
+                        }
+                        aFilters = [new Filter({
+                            path: "Partyno",
+                            operator: "BT",
+                            value1: customerRange[0],
+                            value2: customerRange[1]
+                        })];
+                    }
                 }
-                aFilters = [new Filter({
-                    path: "Partyno",
-                    operator: "BT",
-                    value1: aCustomerStart[0].getKey(),
-                    value2: aCustomerEnd[0].getKey()
-                })];
             }
+
             if (oEvent.getParameters().refreshButtonPressed) {
                 // Search field's 'refresh' button has been pressed.
                 // This is visible if you select any list item.
